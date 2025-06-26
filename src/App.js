@@ -33,6 +33,7 @@ function App() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  const [qrData, setQrData] = useState(null);
 
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
@@ -363,23 +364,25 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
     if (!validateForm()) {
-      setIsSubmitting(false);
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       // Create QR code data
-      const qrData = {
+      const newQrData = {
+        id: formData.deliveryId,
         courier: formData.couriername,
         phone: formData.phonenumber,
         packages: parseInt(formData.numberofpackages),
         image: formData.imageurl,
         note: formData.note,
+        timestamp: new Date().toISOString(),
       };
 
+      setQrData(newQrData);
       setShowQR(true);
       setError("");
       setFormErrors({});
@@ -405,9 +408,10 @@ function App() {
     setError("");
     setSuccess("");
     setFormErrors({});
+    setQrData(null);
   };
 
-  if (showQR) {
+  if (showQR && qrData) {
     return (
       <div className="qr-page">
         <div className="qr-container">
@@ -429,15 +433,7 @@ function App() {
 
           <div className="qr-code-wrapper">
             <QRCode
-              value={JSON.stringify({
-                id: formData.deliveryId,
-                courier: formData.couriername,
-                phone: formData.phonenumber,
-                packages: parseInt(formData.numberofpackages),
-                image: formData.imageurl,
-                note: formData.note,
-                timestamp: new Date().toISOString(),
-              })}
+              value={JSON.stringify(qrData)}
               size={200}
               level="H"
               includeMargin={true}
@@ -808,25 +804,6 @@ function App() {
           {isSubmitting ? "Generating..." : "Generate QR Code"}
         </button>
       </form>
-
-      {showQR && (
-        <div className="qr-result">
-          <QRCode
-            value={JSON.stringify({
-              id: formData.deliveryId,
-              courier: formData.couriername,
-              phone: formData.phonenumber,
-              packages: parseInt(formData.numberofpackages),
-              image: formData.imageurl,
-              note: formData.note,
-              timestamp: new Date().toISOString(),
-            })}
-            size={256}
-            level="H"
-          />
-          <p>Scan this QR code to view delivery details</p>
-        </div>
-      )}
     </div>
   );
 }
