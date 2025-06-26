@@ -380,9 +380,6 @@ function App() {
         note: formData.note,
       };
 
-      // Convert to JSON string
-      const qrString = JSON.stringify(qrData);
-
       setShowQR(true);
       setError("");
       setFormErrors({});
