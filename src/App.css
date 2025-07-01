@@ -765,3 +765,34 @@ input[type="file"] {
     transform: rotate(360deg);
   }
 }
+
+/* Language switcher styles */
+.language-switcher {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.language-switcher:hover {
+  background: var(--primary-dark);
+}
+
+@media (max-width: 640px) {
+  .language-switcher {
+    top: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
